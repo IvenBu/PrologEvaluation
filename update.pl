@@ -61,59 +61,59 @@ update_Time_ACC(KeyType ,ValueType ,Datastructure, Size, Count,X,AccessType,Acc,
         %Speichermessung
         
 
-update(assert,Keys, Values, _Datastructure,_, StorageKind, Storage) :-
-        storageBytes(StorageKind,update_Assert(Keys, Values),Storage).
+update(assert,Keys, Values, _Datastructure,_, StorageType, Storage) :-
+        storageBytes(StorageType,update_Assert(Keys, Values),Storage).
 
-update(bb,Keys, Values, _Datastructure,_, StorageKind, Storage) :-
-        storageBytes(StorageKind,update_BB(Keys, Values),Storage).
+update(bb,Keys, Values, _Datastructure,_, StorageType, Storage) :-
+        storageBytes(StorageType,update_BB(Keys, Values),Storage).
 
-update(avl,Keys, Values, Datastructure,Back, StorageKind, Storage) :-
-        storageBytes(StorageKind,update_AVL(Keys,Values, Datastructure, Back),Storage).
+update(avl,Keys, Values, Datastructure,Back, StorageType, Storage) :-
+        storageBytes(StorageType,update_AVL(Keys,Values, Datastructure, Back),Storage).
 
-update(assoc,Keys, Values, Datastructure,Back, StorageKind, Storage) :-
-         storageBytes(StorageKind,update_Assoc(Keys,Values,Datastructure, Back),Storage).
+update(assoc,Keys, Values, Datastructure,Back, StorageType, Storage) :-
+         storageBytes(StorageType,update_Assoc(Keys,Values,Datastructure, Back),Storage).
 
-update(mutdict,Keys, Values, Datastructure,Back, StorageKind, Storage) :-
-        storageBytes(StorageKind,update_Mutdict(Keys,Values, Datastructure, Back),Storage).
+update(mutdict,Keys, Values, Datastructure,Back, StorageType, Storage) :-
+        storageBytes(StorageType,update_Mutdict(Keys,Values, Datastructure, Back),Storage).
 
-update(logarr,Keys, Values, Datastructure,Back, StorageKind, Storage) :-
-        storageBytes(StorageKind,update_Logarr(Keys, Values,Datastructure, Back),Storage).
+update(logarr,Keys, Values, Datastructure,Back, StorageType, Storage) :-
+        storageBytes(StorageType,update_Logarr(Keys, Values,Datastructure, Back),Storage).
 
-update(mutarray,Keys, Values, Datastructure,Back, StorageKind, Storage) :-
-        storageBytes(StorageKind,update_Mutarray(Keys, Values,Datastructure, Back),Storage).
+update(mutarray,Keys, Values, Datastructure,Back, StorageType, Storage) :-
+        storageBytes(StorageType,update_Mutarray(Keys, Values,Datastructure, Back),Storage).
         
         
-update(random,Datastructure,Keys,ValuesType,Count, DatastructureFilled,StorageKind, Storage):-
+update(random,Datastructure,Keys,ValuesType,Count, DatastructureFilled,StorageType, Storage):-
         data(Keys ,Count, KeysUpdate),
         data(ValuesType, Count, ValuesUpdate),
-        update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_,StorageKind, Storage).
+        update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_,StorageType, Storage).
 
-update(first,Datastructure,_,ValuesType,Count, DatastructureFilled,StorageKind, Storage):-
+update(first,Datastructure,_,ValuesType,Count, DatastructureFilled,StorageType, Storage):-
         data(ordIdx,Count,KeysUpdate),
         data(ValuesType, Count, ValuesUpdate),
-        update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_,StorageKind, Storage).
+        update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_,StorageType, Storage).
         
-update(last,Datastructure,Keys,ValuesType,Count, DatastructureFilled,StorageKind, Storage):-
+update(last,Datastructure,Keys,ValuesType,Count, DatastructureFilled,StorageType, Storage):-
         length(Keys,X),
         data(ordIdx,X,Count,KeysUpdate),
         data(ValuesType,Count, ValuesUpdate),
-        update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_,StorageKind, Storage).
+        update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_,StorageType, Storage).
 
 
-update_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageKind, Result) :-
-        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageKind, [], Result).
+update_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
+        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [], Result).
 
 update_Storage_ACC(_,_,_,_,_,0,_,_, Result,Result).
 
-update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageKind, Acc, Result):-
+update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc, Result):-
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        update(AccessType,Datastructure,Keys,ValueType,Count,DatastructureFilled,StorageKind,Storage),
+        update(AccessType,Datastructure,Keys,ValueType,Count,DatastructureFilled,StorageType,Storage),
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageKind, [Storage|Acc], Result).
+        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc], Result).
 
             
         
