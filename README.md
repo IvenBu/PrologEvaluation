@@ -7,25 +7,25 @@ Dafür können die folgenden Prädikate verwendet werden, die mit den anschließ
 __insert_Time(+KeyType, +ValueType, +Datastructure, +Size, +X, -Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Dies wird 'X' mal wiederholt und die gemessenen Zeiten der Einfüge-Operationen in einer Liste in der Variable 'Result' ausgegeben.
 
-__insert_Storage(+KeyType, +ValueType, +Datastructure, +Size, +X, +StorageKind, -Result)__
-Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Dies wird 'X' mal wiederholt und die gemessenen Speicherbelegungen des Typs 'Storagekind' in einer Liste in der Variable 'Result' ausgegeben.
+__insert_Storage(+KeyType, +ValueType, +Datastructure, +Size, +X, +StorageType, -Result)__
+Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Dies wird 'X' mal wiederholt und die gemessenen Speicherbelegungen des Typs 'StorageType' in einer Liste in der Variable 'Result' ausgegeben.
 
 __get_Time(+KeyType, +ValueType, +Datastructure, +Size, +Count, +X,+AccessType, -Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend wird auf diese Datenstrukturen mit der Zugriffsart 'AccessType' 'Count'-mal zugegriffen. Dies wird 'X' mal wiederholt und die gemessenen Zeiten der Zugriff-Operationen in einer Liste in der Variable 'Result' ausgegeben.
 
-__get_Storage(+KeyType, +ValueType,+Datastructure,+Size,+Count,+X, +AccessType, +StorageKind, -Result)__
+__get_Storage(+KeyType, +ValueType,+Datastructure,+Size,+Count,+X, +AccessType, +StorageType, -Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend wird auf diese Datenstrukturen mit der Zugriffsart 'AccessType' 'Count'-mal zugegriffen. Dies wird 'X' mal wiederholt und die gemessenen Speicherbelegung der Zugriff-Operationen in einer Liste in der Variable 'Result' ausgegeben.
 
 __remove_Time(+KeyType, +ValueType, +Datastructure, +Size, +Count,  +X,+AccessType, -Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend werden 'Count' viele K-V Paare in der Zugriffsart AccessType entfernt. Dies wird 'X' mal wiederholt und die gemessenen Zeiten der Entfernen-Operationen in einer Liste in der Variable 'Result' ausgegeben.
 
-__remove_Storage(+KeyType, +ValueType,+Datastructure, +Size,+Count, +X,+AccessType, +StorageKind, -Result)__
-Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend werden 'Count' viele K-V Paare in der Zugriffsart AccessType entfernt. Dies wird 'X' mal wiederholt und die gemessene Speicherbelegung des Typs 'Storagekind' in einer Liste in der Varaible 'Result' ausgegeben.
+__remove_Storage(+KeyType, +ValueType,+Datastructure, +Size,+Count, +X,+AccessType, +StorageType, -Result)__
+Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend werden 'Count' viele K-V Paare in der Zugriffsart AccessType entfernt. Dies wird 'X' mal wiederholt und die gemessene Speicherbelegung des Typs 'StorageType' in einer Liste in der Varaible 'Result' ausgegeben.
 
 __update_Time(+KeyType ,+ValueType ,+Datastructure, +Size, +Count, +X,+AccessType, -Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend werden 'Count' - viele K-V Paare in der Zugriffsart AccessType geupdatet. Dies wird 'X' mal wiederholt und die gemessenen Zeiten der Update-Operationen in einer Liste in der Variable 'Result' ausgegeben.
 
-__update_Storage(+KeyType, +ValueType,+Datastructure, +Size,+Count, +X,+AccessType, +StorageKind, -Result)__
+__update_Storage(+KeyType, +ValueType,+Datastructure, +Size,+Count, +X,+AccessType, +StorageType, -Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine Datenstruktur des Typs 'Datastructure' ein. Anschließend werden 'Count' - viele K-V Paare in der Zugriffsart AccessType geupdatet. Dies wird 'X' mal wiederholt und die gemessenen Speicherbelegungen der Update-Operationen in einer Liste in der Variable 'Result' ausgegeben.
 
 Folgende Atome können als Eingabe in die vorangestellten Prädikate verwendet werden:
@@ -40,7 +40,7 @@ ordIdx sind Integerwerte aufsteigend von 1 bis N,unordIx sind Integerwerte von 1
 __Typen für die Werte__
 integer, atom, string
 
-__StorageKind - Arten des Speichers__
+__StorageType - Arten des Speichers__
 global_stack_used, local_stack_used, trail_used, choice_used, heap, garbage (Ausgabe ist [no. of GCs,bytes freed,time spent] )
 
 __AccessType - Zugriffsarten__
