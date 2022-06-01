@@ -55,47 +55,47 @@ remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc, R
 
 %Remove mit Speichermessung
 
-remove_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageKind, Result) :-
-        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageKind, [], Result).
+remove_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
+        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [], Result).
 
 remove_Storage_ACC(_,_,_,_,_,0,_,_, Result,Result).
 
-remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageKind, Acc, Result):-
+remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc, Result):-
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        remove(AccessType,Datastructure,Keys,Count,DatastructureFilled,RemovedKeys,StorageKind,Storage),
+        remove(AccessType,Datastructure,Keys,Count,DatastructureFilled,RemovedKeys,StorageType,Storage),
         subtract(Keys,RemovedKeys,R),
         clean(Datastructure,R),
         print(.),
         XNew is X - 1,
-        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageKind, [Storage|Acc], Result).
+        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc], Result).
         
-remove(random,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageKind, Storage):-
+remove(random,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
         data(Keys ,Count, KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled,StorageKind, Storage).
+        remove(Datastructure,KeysRemove, DatastructureFilled,StorageType, Storage).
 
-remove(first,Datastructure,_,Count, DatastructureFilled,KeysRemove,StorageKind, Storage):-
+remove(first,Datastructure,_,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
         data(ordIdx,Count,KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled,StorageKind, Storage).
+        remove(Datastructure,KeysRemove, DatastructureFilled,StorageType, Storage).
         
-remove(last,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageKind, Storage):-
+remove(last,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
         length(Keys,X),
         data(ordIdx,X,Count,KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled,StorageKind, Storage).
+        remove(Datastructure,KeysRemove, DatastructureFilled,StorageType, Storage).
 
 
-remove(assert,Keys,_Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,remove_Assert(Keys),Storage).
+remove(assert,Keys,_Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,remove_Assert(Keys),Storage).
 
-remove(bb,Keys,_Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,remove_BB(Keys),Storage).
+remove(bb,Keys,_Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,remove_BB(Keys),Storage).
 
-remove(avl,Keys,Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,remove_AVL(Keys,Datastructure),Storage).
+remove(avl,Keys,Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,remove_AVL(Keys,Datastructure),Storage).
 
-remove(mutdict,Keys,Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,remove_Mutdict(Keys,Datastructure),Storage).
+remove(mutdict,Keys,Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,remove_Mutdict(Keys,Datastructure),Storage).
 
 
 
