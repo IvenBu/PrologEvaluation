@@ -63,53 +63,53 @@ get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc, Resu
 
 %Storage
 
-get(assert,Keys, _Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,get_Assert(Keys),Storage).
+get(assert,Keys, _Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,get_Assert(Keys),Storage).
 
-get(bb,Keys, _Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,get_BB(Keys),Storage).
+get(bb,Keys, _Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,get_BB(Keys),Storage).
 
-get(assoc,Keys, Datastructure,StorageKind, Storage):-
-         storageBytes(StorageKind,get_Assoc(Keys,Datastructure),Storage).
+get(assoc,Keys, Datastructure,StorageType, Storage):-
+         storageBytes(StorageType,get_Assoc(Keys,Datastructure),Storage).
 
-get(avl,Keys, Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,get_AVL(Keys,Datastructure),Storage).
+get(avl,Keys, Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,get_AVL(Keys,Datastructure),Storage).
 
-get(mutdict,Keys, Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,get_Mutdict(Keys,Datastructure),Storage).
+get(mutdict,Keys, Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,get_Mutdict(Keys,Datastructure),Storage).
 
-get(logarr,Keys, Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,get_Logarr(Keys,Datastructure),Storage).
+get(logarr,Keys, Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,get_Logarr(Keys,Datastructure),Storage).
 
-get(mutarray,Keys, Datastructure,StorageKind, Storage):-
-        storageBytes(StorageKind,get_Mutarray(Keys,Datastructure),Storage).
+get(mutarray,Keys, Datastructure,StorageType, Storage):-
+        storageBytes(StorageType,get_Mutarray(Keys,Datastructure),Storage).
 
-get(random,Datastructure,Keys,Count, DatastructureFilled,StorageKind, Storage):-
+get(random,Datastructure,Keys,Count, DatastructureFilled,StorageType, Storage):-
         data(Keys ,Count, KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled,StorageKind, Storage).
+        get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
 
-get(first,Datastructure,_,Count, DatastructureFilled,StorageKind, Storage):-
+get(first,Datastructure,_,Count, DatastructureFilled,StorageType, Storage):-
         data(ordIdx,Count,KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled,StorageKind, Storage).
+        get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
         
-get(last,Datastructure,Keys,Count, DatastructureFilled,StorageKind, Storage):-
+get(last,Datastructure,Keys,Count, DatastructureFilled,StorageType, Storage):-
         length(Keys,X),
         data(ordIdx,X,Count,KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled,StorageKind, Storage).
+        get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
 
-get_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageKind, Result) :-
-        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageKind, [], Result).
+get_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
+        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [], Result).
 
 get_Storage_ACC(_,_,_,_,_,0,_,_, Result,Result).
 
-get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageKind, Acc, Result):-
+get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc, Result):-
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        get(AccessType,Datastructure,Keys,Count,DatastructureFilled,StorageKind,Storage),
+        get(AccessType,Datastructure,Keys,Count,DatastructureFilled,StorageType,Storage),
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageKind, [Storage|Acc], Result).
+        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc], Result).
 
  
