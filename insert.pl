@@ -36,47 +36,47 @@ insert(mutarray,Keys, Values, Time,Back) :-
         
 /*Einfuegen mit Speichermessung */
 
-insert(assert,Keys, Values,StorageKind, Storage):-
-        storageBytes(StorageKind,insert_Assert(Keys,Values),Storage).
+insert(assert,Keys, Values,StorageType, Storage):-
+        storageBytes(StorageType,insert_Assert(Keys,Values),Storage).
 
-insert(bb,Keys, Values,StorageKind, Storage):-
-        storageBytes(StorageKind,insert_BB(Keys,Values),Storage).
+insert(bb,Keys, Values,StorageType, Storage):-
+        storageBytes(StorageType,insert_BB(Keys,Values),Storage).
 
-insert(assoc,Keys, Values,StorageKind, Storage):-
-        storageBytes(StorageKind,insert_Assoc(Keys,Values,assoc,_),Storage).
+insert(assoc,Keys, Values,StorageType, Storage):-
+        storageBytes(StorageType,insert_Assoc(Keys,Values,assoc,_),Storage).
 
-insert(avl,Keys, Values,StorageKind, Storage):-
-        storageBytes(StorageKind,insert_AVL(Keys,Values,empty,_),Storage).
+insert(avl,Keys, Values,StorageType, Storage):-
+        storageBytes(StorageType,insert_AVL(Keys,Values,empty,_),Storage).
 
-insert(mutdict,Keys, Values,StorageKind, Storage):-
+insert(mutdict,Keys, Values,StorageType, Storage):-
         new_mutdict(MutdictNeu),
-        storageBytes(StorageKind,insert_Mutdict(Keys,Values,MutdictNeu,_),Storage).
+        storageBytes(StorageType,insert_Mutdict(Keys,Values,MutdictNeu,_),Storage).
 
-insert(logarr,Keys, Values,StorageKind, Storage):-
+insert(logarr,Keys, Values,StorageType, Storage):-
         new_array(Array),
-        storageBytes(StorageKind,insert_Logarr(Keys,Values,Array,_),Storage).
+        storageBytes(StorageType,insert_Logarr(Keys,Values,Array,_),Storage).
 
-insert(mutarray,Keys, Values,StorageKind, Storage):-
+insert(mutarray,Keys, Values,StorageType, Storage):-
         length(Keys,X),
         new_mutarray(MutarrayNeu,X),
-        storageBytes(StorageKind,insert_Mutarray(Keys,Values,MutarrayNeu,_),Storage).
+        storageBytes(StorageType,insert_Mutarray(Keys,Values,MutarrayNeu,_),Storage).
 
 
 /* Speicherbenutzung beim Einfügen*/
 
-insert_Storage(KeyType, ValuesType,Datastructure, Size,X, StorageKind, Result) :-
-        insert_Storage_ACC(KeyType, ValuesType,Datastructure, Size,X, StorageKind, [], Result).
+insert_Storage(KeyType, ValuesType,Datastructure, Size,X, StorageType, Result) :-
+        insert_Storage_ACC(KeyType, ValuesType,Datastructure, Size,X, StorageType, [], Result).
 
 insert_Storage_ACC(_,_,_,_,0,_,Result,Result).
 
-insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,X, StorageKind, Acc, Result):-
+insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,X, StorageType, Acc, Result):-
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
-        insert(Datastructure,Keys, Values, StorageKind, Storage),
+        insert(Datastructure,Keys, Values, StorageType, Storage),
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,XNew, StorageKind, [Storage|Acc], Result).
+        insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,XNew, StorageType, [Storage|Acc], Result).
 
 insert_Time(KeyType ,ValueType ,Datastructure,Size,X,Result) :-
 insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,[],Result).
