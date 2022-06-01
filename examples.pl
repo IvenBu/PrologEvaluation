@@ -6,7 +6,7 @@
   % Datenstrukturen: assert,bb,assoc,avl,mutdict,logarr und  mutarray
   % KeyTypes: ordIdx,unordIdx, idxrev, integer, atom, string.
   % ValueTypes: integer, atom, string
-  % StorageKinds:global_stack_used, local_stack_used, trail_used, choice_used, heap,garbage
+  % StorageTypes:global_stack_used, local_stack_used, trail_used, choice_used, heap,garbage
   % AccessType: random, first, last
 
 /*Die Datenstrukturen logarr und Mutarray können als Schlüssel lediglich die Typen 'ordIdx','unordIdx' und 'idxrev' verwenden.AccessType first und last können lediglich mit ordIdx verwendet werden */
