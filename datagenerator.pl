@@ -24,7 +24,7 @@ data(ordIdx,X,Data) :-
         
 data(unordIdx,X,Data) :-
 	numlist(1,X,H),
-	selection(X,H,[],Data).
+	shuffle(X,H,[],Data).
 	
 data(idxrev,X,Data) :-
 	numlist(1,X,H),
@@ -35,15 +35,15 @@ data(integer,X,Data) :-
         
 /* Für die random Auswahl von X Integern aus einer Liste Helper*/
 data(Keys,Count, Data) :-
-	selection(Count,Keys,[],Data).
+	shuffle(Count,Keys,[],Data).
 
-selection(0,_,Values,Values).
+shuffle(0,_,Values,Values).
 
-selection(X,H,Acc,Data) :-
+shuffle(X,H,Acc,Data) :-
 	random_member(Value,H),
         SizeNew is X - 1,
         del_element(Value,H,HNew),
-        selection(SizeNew,HNew,[Value|Acc],Data).
+        shuffle(SizeNew,HNew,[Value|Acc],Data).
         
 /* für den Zugriff auf die Elemente von Hinten*/  
 data(ordIdx,X,Count,Keys) :-
