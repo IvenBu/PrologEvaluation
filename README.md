@@ -51,3 +51,5 @@ Die Datenstrukturen logarr und Mutarray können als Schlüssel lediglich die Typ
 
 Das remove Prädikat funktioniert lediglich für die Datenstrukturen assert,bb,avl und mutdict.
 
+Die Daten werden mit dem generate/2 Prädikat aus dem SICStus Prolog Fuzzer von J. Schmidt erstellt. (https://github.com/Joshua27/SICStusPrologFuzzer)
+
