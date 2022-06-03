@@ -2,6 +2,8 @@
 :- use_module(insert).
 :- use_module(remove).
 :- use_module(update).
+:- use_module(library(random),[getrand/1,setrand/1]).
+
 
   % Datenstrukturen: assert,bb,assoc,avl,mutdict,logarr und  mutarray
   % KeyTypes: ordIdx,unordIdx, idxrev, integer, atom, string.
@@ -13,6 +15,16 @@
 
 
 %Einige Verwendungsbeispiele mit kurzen Laufzeiten:
+
+%Bsp. mit der Verwendung eines Seeds.
+run_insertTimeSeed(Seed,Assert) :-
+        setrand(Seed),
+        format('Used Seed is ~w~n',[Seed]),
+        set_prolog_flag(gc,off),
+        insert_Time(ordIdx,integer,assert,1000,10,Assert).
+
+%run_insertTimeSeed(random(27134,9213,17773,425005073),Assert).
+
 
 run_insertTime(Assert,BB,AVL,Assoc,Mutdict,Logarr,Mutarray):-
         set_prolog_flag(gc,off),
