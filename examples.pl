@@ -18,6 +18,7 @@
 
 %Bsp. mit der Verwendung eines Seeds.
 run_insertTimeSeed(Seed,Assert) :-
+        set_prolog_flag(gc,off),
         setrand(Seed),
         format('Used Seed is ~w~n',[Seed]),
         set_prolog_flag(gc,off),
