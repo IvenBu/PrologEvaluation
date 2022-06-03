@@ -38,11 +38,13 @@ remove(last,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,Time):-
         remove(Datastructure,KeysRemove, DatastructureFilled, Time).
 
 remove_Time(KeyType, ValueType,Datastructure,Size,Count,X,AccessType,Result) :-
-       remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,[], Result).
+	getrand(Seed),
+	remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,[],Seed, Result).
 
-remove_Time_ACC(_,_,_,_,_,0,_,Result,Result).
+remove_Time_ACC(_,_,_,_,_,0,_,Result,_,Result).
 
-remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc, Result):-
+remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc,Seed, Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
@@ -51,16 +53,18 @@ remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc, R
         clean(Datastructure,R),
         print(.),
         XNew is X - 1,
-        remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,XNew,AccessType,[Time|Acc], Result).
+        remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,XNew,AccessType,[Time|Acc],Seed, Result).
 
 %Remove mit Speichermessung
 
 remove_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
-        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [], Result).
+	getrand(Seed),
+        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [],Seed, Result).
 
-remove_Storage_ACC(_,_,_,_,_,0,_,_, Result,Result).
+remove_Storage_ACC(_,_,_,_,_,0,_,_, Result,_,Result).
 
-remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc, Result):-
+remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc,Seed, Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
@@ -69,7 +73,7 @@ remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, St
         clean(Datastructure,R),
         print(.),
         XNew is X - 1,
-        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc], Result).
+        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc],Seed, Result).
         
 remove(random,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
         data(Keys ,Count, KeysRemove),
