@@ -6,6 +6,7 @@
 :- use_module(datastructures).
 :- use_module(library(sets),[subtract/3]).
 :- use_module(library(lists)).
+:- use_module(library(random),[getrand/1,setrand/1]).
 
 /* löschen der Daten*/
 remove(assert,Keys,_Datastructure,Time):-
