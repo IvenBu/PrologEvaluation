@@ -3,6 +3,7 @@
 :- use_module(datagenerator).
 :- use_module(insert).
 :- use_module(datastructures).
+:- use_module(library(random),[getrand/1,setrand/1]).
 
 /*Prozeduren bzgl. dem Zugriff auf Daten aus den Datenstrukturen */
 
