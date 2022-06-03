@@ -3,6 +3,7 @@
 :- use_module(datagenerator).
 :- use_module(insert).
 :- use_module(datastructures).
+:- use_module(library(random),[getrand/1,setrand/1]).
 
 /* Updaten mit Zeitmessung */
 update(assert,Keys, Values, _Datastructure,_, Time) :-
@@ -43,11 +44,13 @@ update(first,Datastructure,_, ValuesType,Count,DatastructureFilled, Time):-
         update(Datastructure,KeysUpdate,ValuesUpdate, DatastructureFilled,_, Time).
         
 update_Time(KeyType ,ValuesType ,Datastructure, Size,Count,X,AccessType,Time) :-
-       update_Time_ACC(KeyType ,ValuesType ,Datastructure, Size,Count,X,AccessType,[],Time).
+        getrand(Seed),
+       update_Time_ACC(KeyType ,ValuesType ,Datastructure, Size,Count,X,AccessType,[],Seed,Time).
 
-update_Time_ACC(_,_,_,_,_,0,_,Result,Result).
+update_Time_ACC(_,_,_,_,_,0,_,Result,_,Result).
 
-update_Time_ACC(KeyType ,ValueType ,Datastructure, Size, Count,X,AccessType,Acc,Result):-
+update_Time_ACC(KeyType ,ValueType ,Datastructure, Size, Count,X,AccessType,Acc,Seed,Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
@@ -55,7 +58,7 @@ update_Time_ACC(KeyType ,ValueType ,Datastructure, Size, Count,X,AccessType,Acc,
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        update_Time_ACC(KeyType ,ValueType ,Datastructure, Size, Count,XNew,AccessType,[Time|Acc],Result).
+        update_Time_ACC(KeyType ,ValueType ,Datastructure, Size, Count,XNew,AccessType,[Time|Acc],Seed,Result).
         
         
         %Speichermessung
@@ -101,11 +104,13 @@ update(last,Datastructure,Keys,ValuesType,Count, DatastructureFilled,StorageType
 
 
 update_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
-        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [], Result).
+	getrand(Seed),
+        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [],Seed, Result).
 
-update_Storage_ACC(_,_,_,_,_,0,_,_, Result,Result).
+update_Storage_ACC(_,_,_,_,_,0,_,_, Result,_,Result).
 
-update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc, Result):-
+update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc,Seed, Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
@@ -113,7 +118,7 @@ update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, St
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc], Result).
+        update_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc],Seed, Result).
 
             
         
