@@ -45,11 +45,13 @@ get(last,Datastructure,Keys,Count, DatastructureFilled, Time):-
         get(Datastructure,KeysGet,DatastructureFilled, Time).
 
 get_Time(KeyType, ValueType,Datastructure,Size,Count,X,AccessType,Result) :-
-       get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,[], Result).
+        getrand(Seed),
+        get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,[],Seed, Result).
 
-get_Time_ACC(_,_,_,_,_,0,_,Result,Result).
+get_Time_ACC(_,_,_,_,_,0,_,Result,_,Result).
 
-get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc, Result):-
+get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc,Seed, Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
@@ -57,7 +59,7 @@ get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc, Resu
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,XNew,AccessType,[Time|Acc], Result).
+        get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,XNew,AccessType,[Time|Acc],Seed, Result).
 
 
 
@@ -98,11 +100,13 @@ get(last,Datastructure,Keys,Count, DatastructureFilled,StorageType, Storage):-
         get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
 
 get_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
-        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [], Result).
+	getrand(Seed),
+        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [],Seed, Result).
 
-get_Storage_ACC(_,_,_,_,_,0,_,_, Result,Result).
+get_Storage_ACC(_,_,_,_,_,0,_,_, Result,_,Result).
 
-get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc, Result):-
+get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc,Seed, Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys,Values,_,DatastructureFilled),
@@ -110,6 +114,6 @@ get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, Stora
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc], Result).
+        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc],Seed, Result).
 
  
