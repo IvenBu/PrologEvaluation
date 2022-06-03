@@ -65,32 +65,36 @@ insert(mutarray,Keys, Values,StorageType, Storage):-
 /* Speicherbenutzung beim Einfügen*/
 
 insert_Storage(KeyType, ValuesType,Datastructure, Size,X, StorageType, Result) :-
-        insert_Storage_ACC(KeyType, ValuesType,Datastructure, Size,X, StorageType, [], Result).
+        getrand(Seed),
+        insert_Storage_ACC(KeyType, ValuesType,Datastructure, Size,X, StorageType, [],Seed, Result).
 
 insert_Storage_ACC(_,_,_,_,0,_,Result,Result).
 
-insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,X, StorageType, Acc, Result):-
+insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,X, StorageType, Acc,Seed, Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys, Values, StorageType, Storage),
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,XNew, StorageType, [Storage|Acc], Result).
+        insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,XNew, StorageType, [Storage|Acc],Seed, Result).
 
 insert_Time(KeyType ,ValueType ,Datastructure,Size,X,Result) :-
-insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,[],Result).
+getrand(Seed),
+insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,[],Seed,Result).
 
-insert_Time_ACC(_ ,_,_,_,0,Result,Result).
+insert_Time_ACC(_ ,_,_,_,0,Result,_,Result).
 
-insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,Acc,Result):-
+insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,Acc,Seed,Result):-
+        setrand(Seed),
         data(KeyType, Size, Keys),
         data(ValueType, Size, Values),
         insert(Datastructure,Keys, Values, Time,_),
         clean(Datastructure,Keys),
         print(.),
         XNew is X - 1,
-        insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,XNew,[Time|Acc],Result).
+        insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,XNew,[Time|Acc],Seed,Result).
               
 
 
