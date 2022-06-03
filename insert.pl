@@ -6,6 +6,7 @@
 :- use_module(datagenerator).
 :- use_module(timeAndStorage).
 :- use_module(datastructures).
+:- use_module(library(random),[getrand/1,setrand/1]).
 
 /*Einfuegen mit Zeitmessung */
 
