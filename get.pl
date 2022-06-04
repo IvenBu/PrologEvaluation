@@ -53,3 +53,4 @@ get(logarr,Measurement,Keys,Array,Result,_Back) :-
 	measurement(Measurement,Result,get_Logarr(Keys,Array)).
 
 get(mutarray,Measurement,Keys,Mutarray,Result,_Back) :-
+	measurement(Measurement,Result,get_Mutarray(Keys,Mutarray)).
