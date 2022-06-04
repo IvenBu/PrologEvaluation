@@ -1,120 +1,55 @@
-:- module(get,[get/4,get_Time/8,get_Storage/9]).
+:- module(get,[analyseGet/8,analyseGet/9]).
+
 :- use_module(timeAndStorage).
-:- use_module(datagenerator).
-:- use_module(insert).
 :- use_module(datastructures).
+:- use_module(insert).
+:- use_module(datagenerator).
 :- use_module(library(random),[getrand/1,setrand/1]).
 
-/*Prozeduren bzgl. dem Zugriff auf Daten aus den Datenstrukturen */
-
-% Time
-
-get(assert,Keys, _Datastructure, Time):-
-        time(Time,get_Assert(Keys)).
-
-get(bb,Keys, _Datastructure, Time):-
-        time(Time,get_BB(Keys)).
-
-get(assoc,Keys, Datastructure, Time):-
-        time(Time,get_Assoc(Keys,Datastructure)).
-
-get(avl,Keys, Datastructure, Time):-
-        time(Time,get_AVL(Keys,Datastructure)).
-
-get(mutdict,Keys, Datastructure, Time):-
-        time(Time,get_Mutdict(Keys,Datastructure)).
-
-get(logarr,Keys, Datastructure, Time):-
-        time(Time,get_Logarr(Keys,Datastructure)).
-
-get(mutarray,Keys, Datastructure, Time):-
-        time(Time,get_Mutarray(Keys,Datastructure)).
-
-
-
-get(random,Datastructure,Keys,Count, DatastructureFilled, Time):-
-        data(Keys ,Count, KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled, Time).
-
-get(first,Datastructure,_,Count, DatastructureFilled, Time):-
-        data(ordIdx,Count,KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled, Time).
+%With a given Seed
+analyseGet(Measurement,DatastructureType,KeyType,ValueType,Size,ToGet,AccessType,Seed,Result):-  
+	setrand(Seed), 
+	format('~n Used Seed for Get is ~w~n',[Seed]),      
+	datagenerator(ValueType,KeyType,Size,Keys,Values),
+	setrand(Seed), 
+	datagenerator(AccessType,Keys,ToGet,GetKeys),
+	analyseGetACC(Measurement,DatastructureType,Keys,Values,GetKeys,10,[],Result).
+	
+%Without a given Seed
+analyseGet(Measurement,DatastructureType,KeyType,ValueType,Size,ToGet,AccessType,Result):-  
+	getrand(Seed), 
+	format('~n Used Seed for Get is ~w~n',[Seed]),      
+	datagenerator(ValueType,KeyType,Size,Keys,Values),
+	setrand(Seed), 
+	datagenerator(AccessType,Keys,ToGet,GetKeys),
+	analyseGetACC(Measurement,DatastructureType,Keys,Values,GetKeys,10,[],Result).
         
-get(last,Datastructure,Keys,Count, DatastructureFilled, Time):-
-        length(Keys,X),
-        data(ordIdx,X,Count,KeysGet),
-        get(Datastructure,KeysGet,DatastructureFilled, Time).
-
-get_Time(KeyType, ValueType,Datastructure,Size,Count,X,AccessType,Result) :-
-        getrand(Seed),
-        get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,[],Seed, Result).
-
-get_Time_ACC(_,_,_,_,_,0,_,Result,_,Result).
-
-get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc,Seed, Result):-
-        setrand(Seed),
-        data(KeyType, Size, Keys),
-        data(ValueType, Size, Values),
-        insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        get(AccessType,Datastructure,Keys,Count, DatastructureFilled,Time),
-        clean(Datastructure,Keys),
+analyseGetACC(_,_,_,_,_,0,Result,Result):- !.
+        
+analyseGetACC(Measurement,DatastructureType,Keys,Values,GetKeys,X,Acc,Result):-
+        insert(DatastructureType,time,Keys,Values,Datastructure,_Time),
+        get(DatastructureType,Measurement,GetKeys,Datastructure,R,_Back),
+        clean(DatastructureType,Keys),
         print(.),
         XNew is X - 1,
-        get_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,XNew,AccessType,[Time|Acc],Seed, Result).
-
-
-
-%Storage
-
-get(assert,Keys, _Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,get_Assert(Keys),Storage).
-
-get(bb,Keys, _Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,get_BB(Keys),Storage).
-
-get(assoc,Keys, Datastructure,StorageType, Storage):-
-         storageBytes(StorageType,get_Assoc(Keys,Datastructure),Storage).
-
-get(avl,Keys, Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,get_AVL(Keys,Datastructure),Storage).
-
-get(mutdict,Keys, Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,get_Mutdict(Keys,Datastructure),Storage).
-
-get(logarr,Keys, Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,get_Logarr(Keys,Datastructure),Storage).
-
-get(mutarray,Keys, Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,get_Mutarray(Keys,Datastructure),Storage).
-
-get(random,Datastructure,Keys,Count, DatastructureFilled,StorageType, Storage):-
-        data(Keys ,Count, KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
-
-get(first,Datastructure,_,Count, DatastructureFilled,StorageType, Storage):-
-        data(ordIdx,Count,KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
+        analyseGetACC(Measurement,DatastructureType,Keys,Values,GetKeys,XNew,[R|Acc],Result). 
         
-get(last,Datastructure,Keys,Count, DatastructureFilled,StorageType, Storage):-
-        length(Keys,X),
-        data(ordIdx,X,Count,KeysGet),
-        get(Datastructure,KeysGet, DatastructureFilled,StorageType, Storage).
+get(assert,Measurement,Keys,_Assert,Result,_Back) :-
+        measurement(Measurement,Result,get_Assert(Keys)).
+        
+get(bb,Measurement,Keys,_BB,Result,_Back) :-
+        measurement(Measurement,Result,get_BB(Keys)).
 
-get_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
-	getrand(Seed),
-        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [],Seed, Result).
+get(assoc,Measurement,Keys,Assoc,Result,_Back) :-
+        measurement(Measurement,Result,get_Assoc(Keys,Assoc)).
 
-get_Storage_ACC(_,_,_,_,_,0,_,_, Result,_,Result).
+get(avl,Measurement,Keys,Avl,Result,_Back) :-
+        measurement(Measurement,Result,get_AVL(Keys,Avl)).
 
-get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc,Seed, Result):-
-        setrand(Seed),
-        data(KeyType, Size, Keys),
-        data(ValueType, Size, Values),
-        insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        get(AccessType,Datastructure,Keys,Count,DatastructureFilled,StorageType,Storage),
-        clean(Datastructure,Keys),
-        print(.),
-        XNew is X - 1,
-        get_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc],Seed, Result).
+get(mutdict,Measurement,Keys,Mutdict,Result,_Back) :-
+        measurement(Measurement,Result,get_Mutdict(Keys,Mutdict)).
 
- 
+get(logarr,Measurement,Keys,Array,Result,_Back) :-
+	measurement(Measurement,Result,get_Logarr(Keys,Array)).
+
+get(mutarray,Measurement,Keys,Mutarray,Result,_Back) :-
