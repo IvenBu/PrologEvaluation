@@ -8,7 +8,7 @@
 :- use_module(library(mutdict)).
 :- use_module(library(mutarray)).
 :- use_module(library(logarr)).
-
+:- use_module(library(random),[getrand/1,setrand/1]).
 
 /* Einzelne Datenstrukturen mit den für Sie wichtigen Operationen*/
 
