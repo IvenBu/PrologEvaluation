@@ -1,101 +1,59 @@
-:- module(insert,[insert_Time/6,insert_Storage/7,insert/5]).
+:- module(insert,[insert/6,analyseInsert/6,analyseInsert/7]).
 
 :- use_module(library(mutarray)).
 :- use_module(library(logarr)).
 :- use_module(library(mutdict)).
-:- use_module(datagenerator).
 :- use_module(timeAndStorage).
 :- use_module(datastructures).
+:- use_module(datagenerator).
 :- use_module(library(random),[getrand/1,setrand/1]).
 
-/*Einfuegen mit Zeitmessung */
+%With a given Seed
+analyseInsert(Measurement,DatastructureType,KeyType,ValueType,Size,Seed,Result):-    
+	setrand(Seed),
+	format('~n Used Seed for Insert is ~w~n',[Seed]),
+	datagenerator(ValueType,KeyType,Size,Keys,Values),
+	analyseInsertACC(Measurement,DatastructureType,Keys,Values,10,[],Result).
 
-insert(assert,Keys, Values, Time, _) :-
-        time(Time,insert_Assert(Keys,Values)).
+%Without a given Seed
+analyseInsert(Measurement,DatastructureType,KeyType,ValueType,Size,Result):-    
+	getrand(Seed),
+	format('~n Used Seed for Insert is ~w~n',[Seed]),
+	datagenerator(ValueType,KeyType,Size,Keys,Values),
+	analyseInsertACC(Measurement,DatastructureType,Keys,Values,10,[],Result).
 
-insert(bb,Keys, Values, Time, _) :-
-        time(Time,insert_BB(Keys,Values)).
-        
-insert(assoc,Keys, Values, Time, Back) :-
-        time(Time,insert_Assoc(Keys,Values,assoc,Back)).
+analyseInsertACC(_,_,_,_,0,Result,Result):- !.
 
-insert(avl,Keys, Values, Time, Back) :-
-        time(Time,insert_AVL(Keys,Values,empty,Back)).
+analyseInsertACC(Measurement,DatastructureType,Keys,Values,X,Acc,Result):-
+	insert(DatastructureType,Measurement,Keys,Values,_,R),
+	clean(DatastructureType,Keys),
+	print(.),
+	XNew is X - 1,
+	analyseInsertACC(Measurement,DatastructureType,Keys,Values,XNew,[R|Acc],Result).
+	
+insert(assert,Measurement,Keys,Values,_Back,Result) :-
+        measurement(Measurement,Result,insert_Assert(Keys,Values)).
 
-insert(mutdict,Keys, Values, Time, Back) :-
-        new_mutdict(MutdictNeu),
-        time(Time,insert_Mutdict(Keys,Values,MutdictNeu ,Back)).
+insert(bb,Measurement,Keys,Values,_Back,Result) :-
+        measurement(Measurement,Result,insert_BB(Keys,Values)).
 
-insert(logarr,Keys, Values, Time, Back) :-
-        new_array(Array),
-        time(Time,insert_Logarr(Keys,Values, Array,Back)).
-       
-insert(mutarray,Keys, Values, Time,Back) :-
-        length(Keys,X),
-        new_mutarray(MutarrayNeu,X),
-        time(Time, insert_Mutarray(Keys,Values, MutarrayNeu,Back)).
-        
-/*Einfuegen mit Speichermessung */
+insert(assoc,Measurement,Keys,Values,Back,Result) :-
+        measurement(Measurement,Result,insert_Assoc(Keys,Values,assoc,Back)).
 
-insert(assert,Keys, Values,StorageType, Storage):-
-        storageBytes(StorageType,insert_Assert(Keys,Values),Storage).
+insert(avl,Measurement,Keys,Values,Back,Result) :-
+        measurement(Measurement,Result,insert_AVL(Keys,Values,empty,Back)).
 
-insert(bb,Keys, Values,StorageType, Storage):-
-        storageBytes(StorageType,insert_BB(Keys,Values),Storage).
+insert(mutdict,Measurement,Keys,Values,Back,Result) :-
+        new_mutdict(Mutdict),
+        measurement(Measurement,Result,insert_Mutdict(Keys,Values,Mutdict,Back)).
 
-insert(assoc,Keys, Values,StorageType, Storage):-
-        storageBytes(StorageType,insert_Assoc(Keys,Values,assoc,_),Storage).
+insert(logarr,Measurement,Keys,Values,Back,Result) :-
+	new_array(Array),
+	measurement(Measurement,Result,insert_Logarr(Keys,Values, Array,Back)).
 
-insert(avl,Keys, Values,StorageType, Storage):-
-        storageBytes(StorageType,insert_AVL(Keys,Values,empty,_),Storage).
-
-insert(mutdict,Keys, Values,StorageType, Storage):-
-        new_mutdict(MutdictNeu),
-        storageBytes(StorageType,insert_Mutdict(Keys,Values,MutdictNeu,_),Storage).
-
-insert(logarr,Keys, Values,StorageType, Storage):-
-        new_array(Array),
-        storageBytes(StorageType,insert_Logarr(Keys,Values,Array,_),Storage).
-
-insert(mutarray,Keys, Values,StorageType, Storage):-
-        length(Keys,X),
-        new_mutarray(MutarrayNeu,X),
-        storageBytes(StorageType,insert_Mutarray(Keys,Values,MutarrayNeu,_),Storage).
-
-
-/* Speicherbenutzung beim Einfügen*/
-
-insert_Storage(KeyType, ValuesType,Datastructure, Size,X, StorageType, Result) :-
-        getrand(Seed),
-        insert_Storage_ACC(KeyType, ValuesType,Datastructure, Size,X, StorageType, [],Seed, Result).
-
-insert_Storage_ACC(_,_,_,_,0,_,Result,Result).
-
-insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,X, StorageType, Acc,Seed, Result):-
-        setrand(Seed),
-        data(KeyType, Size, Keys),
-        data(ValueType, Size, Values),
-        insert(Datastructure,Keys, Values, StorageType, Storage),
-        clean(Datastructure,Keys),
-        print(.),
-        XNew is X - 1,
-        insert_Storage_ACC(KeyType, ValueType,Datastructure, Size,XNew, StorageType, [Storage|Acc],Seed, Result).
-
-insert_Time(KeyType ,ValueType ,Datastructure,Size,X,Result) :-
-getrand(Seed),
-insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,[],Seed,Result).
-
-insert_Time_ACC(_ ,_,_,_,0,Result,_,Result).
-
-insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,X,Acc,Seed,Result):-
-        setrand(Seed),
-        data(KeyType, Size, Keys),
-        data(ValueType, Size, Values),
-        insert(Datastructure,Keys, Values, Time,_),
-        clean(Datastructure,Keys),
-        print(.),
-        XNew is X - 1,
-        insert_Time_ACC(KeyType ,ValueType ,Datastructure,Size,XNew,[Time|Acc],Seed,Result).
-              
+insert(mutarray,Measurement,Keys,Values,Back,Result) :-
+	length(Keys,X),
+	new_mutarray(Mutarray,X),
+	measurement(Measurement,Result,insert_Mutarray(Keys,Values,Mutarray,Back)).
 
 
