@@ -1,107 +1,59 @@
-:- module(remove,[remove/4,remove_Time/7,remove_Time/8,remove_Storage/9]).
+:- module(remove,[analyseRemove/8,analyseRemove/9]).
 
 :- use_module(timeAndStorage).
-:- use_module(datagenerator).
-:- use_module(insert).
 :- use_module(datastructures).
 :- use_module(library(sets),[subtract/3]).
-:- use_module(library(lists)).
+:- use_module(datagenerator).
+:- use_module(insert).
 :- use_module(library(random),[getrand/1,setrand/1]).
-
-/* löschen der Daten*/
-remove(assert,Keys,_Datastructure,Time):-
-        time(Time,remove_Assert(Keys)).
-
-remove(bb,Keys,_Datastructure,Time):-
-	remove_dups(Keys, Pruned),
-        time(Time,remove_BB(Pruned)).
-
-remove(avl,Keys,Datastructure,Time):-
-        time(Time,remove_AVL(Keys,Datastructure)).
-
-remove(mutdict,Keys,Datastructure,Time):-
-        time(Time,remove_Mutdict(Keys,Datastructure)).
+:- use_module(library(lists)).
 
 
-%remove funktioniert nicht für die Datenstrukturen assoc, loggar und mutarray
 
-remove(random,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,Time):-
-        data(Keys,Count, KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled, Time).
+%With a given Seed
+analyseRemove(Measurement,DatastructureType,KeyType,ValueType,Size,ToRemove,AccessType,Seed,Result):-
+	setrand(Seed), 
+	format('~n Used Seed for Remove is ~w~n',[Seed]),  
+	datagenerator(ValueType,KeyType,Size,Keys,Values),
+	setrand(Seed), 
+	datagenerator(AccessType,Keys,ToRemove,RemoveKeys),
+	analyseRemoveACC(Measurement,DatastructureType,Keys,Values,RemoveKeys,10,[],Result).
+	
+%Without a given Seed
+analyseRemove(Measurement,DatastructureType,KeyType,ValueType,Size,ToRemove,AccessType,Result):-
+	getrand(Seed), 
+	format('~n Used Seed for Remove is ~w~n',[Seed]),  
+	datagenerator(ValueType,KeyType,Size,Keys,Values),
+	setrand(Seed), 
+	datagenerator(AccessType,Keys,ToRemove,RemoveKeys),
+	analyseRemoveACC(Measurement,DatastructureType,Keys,Values,RemoveKeys,10,[],Result).
+     
+analyseRemoveACC(_,_,_,_,_,0,Result,Result):- !.   
 
-remove(first,Datastructure,_,Count, DatastructureFilled,KeysRemove,Time):-
-        data(ordIdx, Count, KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled, Time).
-        
-remove(last,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,Time):-
-        length(Keys,X),
-        data(ordIdx,X,Count,KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled, Time).
-
-remove_Time(KeyType, ValueType,Datastructure,Size,Count,X,AccessType,Result) :-
-	getrand(Seed),
-	remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,[],Seed, Result).
-
-remove_Time_ACC(_,_,_,_,_,0,_,Result,_,Result).
-
-remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,X,AccessType,Acc,Seed, Result):-
-        setrand(Seed),
-        data(KeyType, Size, Keys),
-        data(ValueType, Size, Values),
-        insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        remove(AccessType,Datastructure,Keys,Count,DatastructureFilled,RemovedKeys,Time),
-        subtract(Keys,RemovedKeys,R),
-        clean(Datastructure,R),
+analyseRemoveACC(Measurement,DatastructureType,Keys,Values,RemoveKeys,X,Acc,Result):-     
+	insert(DatastructureType,time,Keys,Values,Datastructure,_Time),
+	remove(DatastructureType,Measurement,RemoveKeys,Datastructure,R),
+	subtract(Keys,RemoveKeys,H),
+        clean(DatastructureType,H),
         print(.),
         XNew is X - 1,
-        remove_Time_ACC(KeyType, ValueType,Datastructure,Size, Count,XNew,AccessType,[Time|Acc],Seed, Result).
+	analyseRemoveACC(Measurement,DatastructureType,Keys,Values,RemoveKeys,XNew,[R|Acc],Result).   
 
-%Remove mit Speichermessung
-
-remove_Storage(KeyType, ValueType,Datastructure, Size,Count, X,AccessType, StorageType, Result) :-
-	getrand(Seed),
-        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, [],Seed, Result).
-
-remove_Storage_ACC(_,_,_,_,_,0,_,_, Result,_,Result).
-
-remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,X,AccessType, StorageType, Acc,Seed, Result):-
-        setrand(Seed),
-        data(KeyType, Size, Keys),
-        data(ValueType, Size, Values),
-        insert(Datastructure,Keys,Values,_,DatastructureFilled),
-        remove(AccessType,Datastructure,Keys,Count,DatastructureFilled,RemovedKeys,StorageType,Storage),
-        subtract(Keys,RemovedKeys,R),
-        clean(Datastructure,R),
-        print(.),
-        XNew is X - 1,
-        remove_Storage_ACC(KeyType, ValueType,Datastructure, Size,Count,XNew,AccessType, StorageType, [Storage|Acc],Seed, Result).
+remove(assert,Measurement,Keys,_Assert,Result) :-			
+        measurement(Measurement,Result,remove_Assert(Keys)).
         
-remove(random,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
-        data(Keys ,Count, KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled,StorageType, Storage).
-
-remove(first,Datastructure,_,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
-        data(ordIdx,Count,KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled,StorageType, Storage).
+remove(bb,Measurement,Keys,_BB,Result) :-
+	remove_dups(Keys,Pruned),
+        measurement(Measurement,Result,remove_BB(Pruned)).
         
-remove(last,Datastructure,Keys,Count, DatastructureFilled,KeysRemove,StorageType, Storage):-
-        length(Keys,X),
-        data(ordIdx,X,Count,KeysRemove),
-        remove(Datastructure,KeysRemove, DatastructureFilled,StorageType, Storage).
+remove(avl,Measurement,Keys,Avl,Result) :-
+        measurement(Measurement,Result,remove_AVL(Keys,Avl)).
 
+remove(mutdict,Measurement,Keys,Mutdict,Result) :-
+        measurement(Measurement,Result,remove_Mutdict(Keys,Mutdict)).
 
-remove(assert,Keys,_Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,remove_Assert(Keys),Storage).
-
-remove(bb,Keys,_Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,remove_BB(Keys),Storage).
-
-remove(avl,Keys,Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,remove_AVL(Keys,Datastructure),Storage).
-
-remove(mutdict,Keys,Datastructure,StorageType, Storage):-
-        storageBytes(StorageType,remove_Mutdict(Keys,Datastructure),Storage).
-
-
+remove(logarr,_,_,_,na).
+remove(mutarray,_,_,_,na).
+remove(assoc,_,_,_,na).
 
 
