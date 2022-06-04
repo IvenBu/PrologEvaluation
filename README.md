@@ -7,13 +7,13 @@ Dafür können die folgenden Prädikate verwendet werden, die mit den anschließ
 __analyseInsert(+Measurement,+DatastructureType,+KeyType,+ValueType,+Size,-Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine leere Datenstruktur des Typs 'DatastructureType' ein. Dies wird 10 mal wiederholt und dabei eine Messung des Typs 'Measurement'durchgeführt und das Ergebnis in einer Liste in der Variable 'Result' ausgegeben.
 
-__analyseGet(+Measurement,+DatastructureType,+KeyType,+ValueType,+Size,+X,+AccessType,Result)__
+__analyseGet(+Measurement,+DatastructureType,+KeyType,+ValueType,+Size,+X,+AccessType,-Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine leere Datenstruktur des Typs 'DatastructureType' ein. Anschließend wird auf diese Datenstrukturen mit der Zugriffsart 'AccessType' 'X'-mal zugegriffen. Dies wird 10 mal wiederholt und dabei eine Messung des Typs 'Measurement'durchgeführt und das Ergebnis in einer Liste in der Variable 'Result' ausgegeben.
 
-__analyseRemove(+Measurement,+DatastructureType,+KeyType,+ValueType,+Size,+X,+AccessType,Result)__
+__analyseRemove(+Measurement,+DatastructureType,+KeyType,+ValueType,+Size,+X,+AccessType,-Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine leere Datenstruktur des Typs 'DatastructureType' ein. Anschließend werden 'X' viele K-V Paare mit der Zugriffsart AccessType entfernt. Dies wird 10 mal wiederholt und dabei eine Messung des Typs 'Measurement'durchgeführt und das Ergebnis in einer Liste in der Variable 'Result' ausgegeben.
 
-__analyseUpdate(+,+DatastructureType,+KeyType,+ValueType,+Size,+X,+AccessType,Result)__
+__analyseUpdate(+Measurement,+DatastructureType,+KeyType,+ValueType,+Size,+X,+AccessType,-Result)__
 Fügt 'Size' zufällige K-V Paare des Key/ValueTyps in eine leere Datenstruktur des Typs 'DatastructureType' ein. Anschließend werden 'X' viele K-V Paare mit der Zugriffsart AccessType geupdatet. Dies wird 10 mal wiederholt und dabei eine Messung des Typs 'Measurement'durchgeführt und das Ergebnis in einer Liste in der Variable 'Result' ausgegeben.
     	
 Durch das Einfügen eines Seeds vor der Variable 'Result', können Berechnung's übergreifend identische Daten verwendet werden. 
