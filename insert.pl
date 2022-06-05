@@ -37,9 +37,6 @@ insert(assert,Measurement,Keys,Values,_Back,Result) :-
 insert(bb,Measurement,Keys,Values,_Back,Result) :-
         measurement(Measurement,Result,insert_BB(Keys,Values)).
 
-insert(assoc,Measurement,Keys,Values,Back,Result) :-
-        measurement(Measurement,Result,insert_Assoc(Keys,Values,assoc,Back)).
-
 insert(avl,Measurement,Keys,Values,Back,Result) :-
         measurement(Measurement,Result,insert_AVL(Keys,Values,empty,Back)).
 
@@ -55,5 +52,10 @@ insert(mutarray,Measurement,Keys,Values,Back,Result) :-
 	length(Keys,X),
 	new_mutarray(Mutarray,X),
 	measurement(Measurement,Result,insert_Mutarray(Keys,Values,Mutarray,Back)).
+
+insert(assoc,Measurement,Keys,Values,Back,Result) :-
+        measurement(Measurement,Result,insert_Assoc(Keys,Values,assoc,Back)).
+	
+
 
 
