@@ -44,9 +44,6 @@ update(assert,Measurement,Keys,Values,_Assert,Result,_Back) :-
         
 update(bb,Measurement,Keys,Values,_BB,Result,_Back) :-
         measurement(Measurement,Result,update_BB(Keys,Values)).
-
-update(assoc,Measurement,Keys,Values,Assoc,Result,Back) :-
-        measurement(Measurement,Result,update_Assoc(Keys,Values,Assoc,Back)).
         
 update(avl,Measurement,Keys,Values,Avl,Result,Back) :-
         measurement(Measurement,Result,update_AVL(Keys,Values,Avl,Back)).
@@ -60,4 +57,7 @@ update(logarr,Measurement,Keys,Values,Array,Result,Back) :-
 
 update(mutarray,Measurement,Keys,Values,Mutarray,Result,Back) :-
 	measurement(Measurement,Result,update_Mutarray(Keys,Values,Mutarray,Back)).
+	
+update(assoc,Measurement,Keys,Values,Assoc,Result,Back) :-
+        measurement(Measurement,Result,update_Assoc(Keys,Values,Assoc,Back)).
 
