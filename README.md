@@ -24,8 +24,8 @@ __Datenstrukturen__
 assert,bb,assoc,avl,mutdict,logarr, mutarray
 
 __Typen für die Schlüssel__
-ordIdx, integer,atom,string
-ordIdx sind Integerwerte aufsteigend von 1 bis N
+integer,atom,string,ordIdx,revIdx,unordIdx
+ordIdx sind Integerwerte aufsteigend von 1 bis N, revIdx sind Integerwerte absteigend von N bis 1 und unordIdx sind Integerwerte von 1 bis N gemischt.
 
 __Typen für die Werte__
 integer, atom, string
