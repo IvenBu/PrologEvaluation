@@ -40,9 +40,6 @@ get(assert,Measurement,Keys,_Assert,Result,_Back) :-
 get(bb,Measurement,Keys,_BB,Result,_Back) :-
         measurement(Measurement,Result,get_BB(Keys)).
 
-get(assoc,Measurement,Keys,Assoc,Result,_Back) :-
-        measurement(Measurement,Result,get_Assoc(Keys,Assoc)).
-
 get(avl,Measurement,Keys,Avl,Result,_Back) :-
         measurement(Measurement,Result,get_AVL(Keys,Avl)).
 
@@ -54,3 +51,6 @@ get(logarr,Measurement,Keys,Array,Result,_Back) :-
 
 get(mutarray,Measurement,Keys,Mutarray,Result,_Back) :-
 	measurement(Measurement,Result,get_Mutarray(Keys,Mutarray)).
+	
+get(assoc,Measurement,Keys,Assoc,Result,_Back) :-
+        measurement(Measurement,Result,get_Assoc(Keys,Assoc)).
