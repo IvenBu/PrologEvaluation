@@ -43,6 +43,14 @@ data(atom,X, Data) :-
 
 data(ordIdx,X,Data) :-
         numlist(1,X, Data),!.
+	
+data(revIdx,X,Data) :-
+        numlist(1,X,H),
+	reverse(H,Data),!.
+
+data(unordIdx,X,Data) :-
+        numlist(1,X,H),
+	shuffle(X,H,[],Data),!.
         
 data(integer,X,Data) :-
         generate(list(integer([]),[size:X]),Data),!.
