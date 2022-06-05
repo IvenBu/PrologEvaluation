@@ -3,6 +3,7 @@
 :- use_module(get).
 :- use_module(update).
 :- use_module(library(random),[getrand/1,setrand/1]).
+:- use_module(statistics).
 
   % Datenstrukturen: assert,bb,assoc,avl,mutdict,logarr und  mutarray
   % KeyTypes: ordIdx,integer, atom, string.
